@@ -17,12 +17,23 @@ def create_client (client_name):
     else:
         print('''Client already is in client's list''')
 
+def get_client_name():
+
+    client_name = None
+    while not client_name:
+        client_name = input('What is the client name?')
+
+    return client_name
+
 def delete_client(client_name):
     global clients
 
     if client_name not in clients:
+
         print('''Client was not found in the client's list''')
+        input('...')
     else:
+        
         clients.remove(client_name)
 
 def update_client(client_name):
@@ -39,6 +50,14 @@ def update_client(client_name):
     else:
         print("Client is not in client's list")
         input('...')
+
+def search_client(client_name):
+    
+    for client in clients:
+        if client != client_name:
+            continue
+        else:
+            return True
 
 
 def list_clients():
@@ -66,6 +85,7 @@ def _print_welcome():
              [C]reate client
              [U]pdate client
              [D]elete client
+             [S]earch client
              [Q]uit for Ventas CRUD''')
     
 
@@ -92,24 +112,36 @@ if __name__ =='__main__':
             
             paso = 'parar'
         
-        elif command != 'Q':
+        elif command == 'C':
+
+            client_name = get_client_name()         
+            create_client(client_name)
             
-            client_name = input('What is the client name?: ')
+        elif command == 'D':
 
-            if command == 'C':
-                
-                create_client(client_name)
-                
-            elif command == 'D':
+            client_name = get_client_name()
+            delete_client(client_name)
 
-                delete_client(client_name)
+        elif command == 'U':
+            
+            client_name = get_client_name()
+            update_client(client_name)
 
-            elif command == 'U':
-                
-                update_client(client_name)
+        elif command == 'S':
 
-            else: 
+            client_name = get_client_name()
+            found = search_client(client_name)
 
-                print('Invalid Command')
+            if found:
+                print("The client is in client's list")
+            else:
+                print(f'''The client: {client_name}, is no in our client's List''')
+
+            input('Back...')
+
+
+        else: 
+
+            print('Invalid Command')
         
         screen_clear()
