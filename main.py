@@ -1,6 +1,14 @@
 import os
 clients = ['pablo', 'ricardo']
 
+def clients_to_str(clients):
+
+    separador = ', '
+    clients_str= separador.join(clients)
+
+    return clients_str
+
+
 def create_client (client_name):
     global clients
     
@@ -35,9 +43,9 @@ def update_client(client_name):
 
 def list_clients():
     global clients
-    cliente_str=', '
-    cliente_str = cliente_str.join(clients)
-    print(cliente_str)
+    clients_str = clients_to_str(clients)
+
+    print(clients_str)
 
 def _put_comma():
     global clients
@@ -45,17 +53,20 @@ def _put_comma():
 
 def _print_welcome():
     global clients
+    clients_str = clients_to_str(clients)
+
     print('''
              *************************************************
              ||||||||||||| Welcome to Ventas CRUD ||||||||||||
              *************************************************
             ''')
-    print('This is de current list:', clients )
-    print('What would you like to do today')
-    print('[C]reate client')
-    print('[U]pdate client')
-    print('[D]elete client')
-    print('[Q]uit for Ventas CRUD')
+    print(f'''
+             This is de current list: {clients_str} 
+             What would you like to do today
+             [C]reate client
+             [U]pdate client
+             [D]elete client
+             [Q]uit for Ventas CRUD''')
     
 
 def screen_clear():
@@ -73,7 +84,9 @@ if __name__ =='__main__':
     while paso == 'seguir':
 
         _print_welcome()
-        command = input('Please input option to do [C], [D], [U] or [Q]: ').upper()
+        command = input('''
+             Please input option to do [C], [D], [U] or [Q]: 
+             ''').upper()
         
         if command == 'Q':
             
