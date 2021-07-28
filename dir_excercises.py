@@ -68,9 +68,15 @@ if __name__=='__main__':
         _welcome()
         birthdayer = get_birthdayer().capitalize()
 
-        if birthdayer is None:
-            continue
-        elif birthdayer: 
-            print(f'''{birthdayer}'s birthday is  in {search_birthdayer(birthdayer)}''')
+        if search_birthdayer(birthdayer) is None:
+            print('''
+            *** No Data ***
+            ''')
+            input('...')
+
+        elif search_birthdayer(birthdayer): 
+            print(f'''
+            |*** {birthdayer}'s birthday is  in {search_birthdayer(birthdayer)} ***|
+                   ''')
             input('...')
         screen_clear()
