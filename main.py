@@ -17,13 +17,24 @@ def create_client (client_name):
     else:
         print('''Client already is in client's list''')
 
-def get_client_name():
 
+def get_client_name():
     client_name = None
+
     while not client_name:
-        client_name = input('What is the client name?')
+
+        client_name = input('''
+             What is the client name?: ''')
+
+        if client_name =='exit':
+            client_name = None
+            break
+
+    if not client_name:
+        exit()
 
     return client_name
+
 
 def delete_client(client_name):
     global clients
@@ -33,8 +44,9 @@ def delete_client(client_name):
         print('''Client was not found in the client's list''')
         input('...')
     else:
-        
+
         clients.remove(client_name)
+
 
 def update_client(client_name):
     global clients
@@ -51,6 +63,7 @@ def update_client(client_name):
         print("Client is not in client's list")
         input('...')
 
+
 def search_client(client_name):
     
     for client in clients:
@@ -61,32 +74,34 @@ def search_client(client_name):
 
 
 def list_clients():
-    global clients
-    clients_str = clients_to_str(clients)
 
-    print(clients_str)
+    clients_listados=''
+    for idx, client in enumerate(clients):
+        clients_listados += f'{idx}: {client} | ' 
+        
+    return clients_listados
 
-def _put_comma():
-    global clients
-    clients+=','
 
 def _print_welcome():
     global clients
-    clients_str = clients_to_str(clients)
 
-    print('''
-             *************************************************
-             ||||||||||||| Welcome to Ventas CRUD ||||||||||||
-             *************************************************
-            ''')
     print(f'''
-             This is de current list: {clients_str} 
-             What would you like to do today
-             [C]reate client
-             [U]pdate client
-             [D]elete client
-             [S]earch client
-             [Q]uit for Ventas CRUD''')
+             ___________________________________________________
+            | ************************************************* |
+            | ||||||||||||| Welcome to Ventas CRUD |||||||||||| |
+            | ************************************************* |
+            |___________________________________________________| 
+            | What would you like to do today                   |
+            | [C]reate client                                   |
+            | [U]pdate client                                   |
+            | [D]elete client                                   |
+            | [S]earch client                                   |
+            | [Q]uit for Ventas CRUD                            |
+            |---------------------------------------------------|
+             
+        This is de current list:
+        {list_clients()}                     
+            ''')
     
 
 def screen_clear():
@@ -136,12 +151,12 @@ if __name__ =='__main__':
                 print("The client is in client's list")
             else:
                 print(f'''The client: {client_name}, is no in our client's List''')
-
+                
             input('Back...')
 
 
         else: 
-
             print('Invalid Command')
+            input('Back...')
         
         screen_clear()
