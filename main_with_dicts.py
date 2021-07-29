@@ -1,24 +1,29 @@
 import os
-clients = [
-    {'name': 'Pablo',
-    'company': 'Google',
-    'email':'pablo@google.com',
-    'position':'Software engineer',
-    },
-    {
-        'name':'Ricardo',
-        'company':'Facebook',
-        'email':'ricardo@facebook.com',
-        'position': 'Data Engineer',
-    }
-]
+import csv
 
-def clients_to_str(clients):
+CLIENT_TABLE = '.clients.csv'
+CLIENT_SCHEMA = ['name','company','email','position']
+clients = []
 
-    separador = ', '
-    clients_str= separador.join(clients)
 
-    return clients_str
+def _initialize_clients_from_storage():
+
+    with open(CLIENT_TABLE, mode='r') as f:
+        reader = csv.DictReader(f,fieldnames=CLIENT_SCHEMA)
+
+        for row in reader:
+            clients.append(row)
+
+
+def _save_clients_to_storage():
+    tmp_table=f'{CLIENT_TABLE}.tmp'
+
+    with open(tmp_table, mode = 'w') as f:
+        writer = csv.DictWriter(f,fieldnames=CLIENT_SCHEMA)
+        writer.writerows(clients)
+
+        os.remove(CLIENT_TABLE)
+        os.rename(tmp_table, CLIENT_TABLE)
 
 
 def create_client (client):
@@ -29,6 +34,23 @@ def create_client (client):
     else:
         print('''Client already is in client's list''')
 
+
+def get_client_by_name():
+    name = None
+
+    while not name:
+
+        name = input('''
+             What is the client name?: ''')
+
+        if name =='exit':
+            name = None
+            break
+
+    if not name:
+        exit()
+
+    return name
 
 def get_client_field(field_name):
     field = None
@@ -105,7 +127,7 @@ def update_client(client_id):
 def search_client(client_name):
     
     for client in clients:
-        if client != client_name:
+        if client['name'] != client_name:
             continue
         else:
             return True
@@ -113,14 +135,14 @@ def search_client(client_name):
 
 def list_clients():
 
-    clients_listados='    id     |    name     |    company     |       email        |       position        |\n'
+    clients_listados='''name     |    company     |       email        |       position        |\n'''
     for i in range(0, len(clients)):
-        clients_listados += f'    {i}->     '
+        
         for idx, client in clients[i].items():
             if idx == 'position':
-                clients_listados += f''' {client}|\n''' 
+                clients_listados += f'''    {client}|\n''' 
             else:
-                clients_listados += f''' {client}|''' 
+                clients_listados += f'''    {client}|''' 
             
             
     return clients_listados
@@ -141,11 +163,11 @@ def _print_welcome():
             | [D]elete client                                   |
             | [S]earch client                                   |
             | [Q]uit for Ventas CRUD                            |
+            | [exit] for finish program
             |---------------------------------------------------|
              
         This is de current list:
-{list_clients()}                     
-            ''')
+    {list_clients()}   ''')
     
 
 def screen_clear():
@@ -157,6 +179,7 @@ def screen_clear():
         sistema = os.system('cls')
 
 if __name__ =='__main__':
+    _initialize_clients_from_storage()
 
     paso = 'seguir'
 
@@ -193,7 +216,7 @@ if __name__ =='__main__':
 
         elif command == 'S':
 
-            client_name = get_client_name()
+            client_name = get_client_by_name()
             found = search_client(client_name)
 
             if found:
@@ -207,5 +230,7 @@ if __name__ =='__main__':
         else: 
             print('Invalid Command')
             input('Back...')
+        
+        _save_clients_to_storage()
         
         screen_clear()
