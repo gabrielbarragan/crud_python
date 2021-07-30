@@ -1,0 +1,4 @@
+click==8.0.1
+# Editable Git install with no remote (pv==0.1)
+-e /home/gabo/Platzi/escuelaweb/CursoPython/crud_python/ventas
+tabulate==0.8.9
